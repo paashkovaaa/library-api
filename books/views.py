@@ -1,6 +1,7 @@
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import mixins
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.viewsets import GenericViewSet
 
 from books.models import Book
@@ -18,6 +19,12 @@ class BookViewSet(
         if self.action == "list":
             return BookListSerializer
         return BookDetailSerializer
+
+    def get_permissions(self):
+        if self.action == "list":
+            return [AllowAny()]
+        else:
+            return [IsAdminUser()]
 
     @staticmethod
     def _params_to_ints(qs):
