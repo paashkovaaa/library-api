@@ -11,6 +11,7 @@ from books.seralizers import BookListSerializer, BookDetailSerializer
 class BookViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     GenericViewSet,
@@ -21,7 +22,7 @@ class BookViewSet(
         return BookDetailSerializer
 
     def get_permissions(self):
-        if self.action == "list":
+        if self.action in ("list", "retrieve"):
             return [AllowAny()]
         else:
             return [IsAdminUser()]
