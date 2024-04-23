@@ -1,16 +1,26 @@
+from datetime import date
+
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import mixins, status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from borrowings.models import Borrowing
-from borrowings.serializers import BorrowingListSerializer, BorrowingDetailSerializer
+from borrowings.serializers import (
+    BorrowingListSerializer,
+    BorrowingDetailSerializer,
+    BorrowingCreateSerializer,
+)
 
 
 class BorrowingViewSet(
-    mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    GenericViewSet,
 ):
     permission_classes = [
         IsAuthenticated,
@@ -67,4 +77,29 @@ class BorrowingViewSet(
     def get_serializer_class(self):
         if self.action == "list":
             return BorrowingListSerializer
+        elif self.action == "create":
+            return BorrowingCreateSerializer
         return BorrowingDetailSerializer
+
+    @extend_schema(
+        request=None,
+    )
+    @action(
+        detail=True, methods=["post"], url_path="return", url_name="return_borrowing"
+    )
+    def return_borrowing(self, request, pk=None):
+        borrowing = self.get_object()
+        if borrowing.actual_return_date:
+            return Response(
+                {"detail": "This borrowing has already been returned."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        borrowing.actual_return_date = date.today()
+        borrowing.book.inventory += 1
+        borrowing.book.save()
+        borrowing.save()
+
+        return Response(
+            {"detail": "Borrowing returned successfully."},
+            status=status.HTTP_200_OK,
+        )
