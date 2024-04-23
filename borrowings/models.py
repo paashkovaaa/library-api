@@ -16,16 +16,12 @@ class Borrowing(models.Model):
         null=True,
         blank=True,
     )
-    book_id = models.ForeignKey(
-        Book, on_delete=models.CASCADE, related_name="borrowings"
-    )
-    user_id = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="borrowings"
-    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="borrowings")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="borrowings")
 
     @property
     def is_active(self):
-        return not self.actual_return_date
+        return self.actual_return_date is None
 
     def clean(self):
         if self.expected_return_date <= self.borrow_date:
@@ -35,4 +31,4 @@ class Borrowing(models.Model):
             raise ValidationError("Actual return date must not be before borrow date.")
 
     def __str__(self):
-        return f"{self.book_id.title} borrowed by {self.user_id.email} on {self.borrow_date}"
+        return f"{self.book.title} borrowed by {self.user.email} on {self.borrow_date}"
