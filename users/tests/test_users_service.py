@@ -6,8 +6,6 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from users.serializers import UserSerializer
-
 USER_URL = reverse("users:create")
 ME_URL = reverse("users:manage")
 
@@ -51,10 +49,10 @@ class UserTests(TestCase):
             "last_name": "User",
             "password": "newstrongpassword123",
         }
-        response = self.client.patch(ME_URL, update_payload)
+        res = self.client.patch(ME_URL, update_payload)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["first_name"], update_payload["first_name"])
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["first_name"], update_payload["first_name"])
 
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password("newstrongpassword123"))
