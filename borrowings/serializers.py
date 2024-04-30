@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from books.seralizers import BookDetailSerializer
 from borrowings.models import Borrowing
+from borrowings.send_telegram_message import send_telegram_message
 
 
 class BorrowingDetailSerializer(serializers.ModelSerializer):
@@ -62,4 +63,14 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
             user=self.context["request"].user,
             **validated_data,
         )
+
+        user = self.context["request"].user
+        message = (
+            f"New borrowing created!\n"
+            f"Book: {book.title}\n"
+            f"User: {user.email}\n"
+            f"Borrow Date: {borrowing.borrow_date}\n"
+            f"Expected Return Date: {borrowing.expected_return_date}"
+        )
+        send_telegram_message(message)
         return borrowing
