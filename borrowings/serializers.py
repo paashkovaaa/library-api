@@ -66,8 +66,8 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
 
         user = self.context["request"].user
         message = (
-            f"New borrowing created!\n"
-            f"Book: {book.title}\n"
+            f"New borrowing num.{borrowing.id} created!\n"
+            f"Book: {book.title} by {book.author}\n"
             f"User: {user.email}\n"
             f"Borrow Date: {borrowing.borrow_date}\n"
             f"Expected Return Date: {borrowing.expected_return_date}"
