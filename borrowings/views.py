@@ -55,6 +55,19 @@ class BorrowingViewSet(
     @extend_schema(
         parameters=[
             OpenApiParameter(
+                name="id",
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.PATH,
+                description="The ID of the borrowing",
+            ),
+        ],
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
                 "is_active",
                 type=OpenApiTypes.BOOL,
                 description="Filter by is_active field (ex. ?is_active=True)",
