@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from books.models import Book
-from books.seralizers import BookListSerializer, BookDetailSerializer
+from books.serializers import BookListSerializer, BookDetailSerializer
 
 BOOK_URL = reverse("books:books-list")
 
@@ -69,7 +69,7 @@ class UnauthenticatedOrNotAdminBooksTest(TestCase):
             "author": "Author",
             "cover": "SOFT",
             "inventory": 4,
-            "daily_fee": 5.00
+            "daily_fee": 5.00,
         }
         res = self.client.post(BOOK_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
@@ -80,7 +80,7 @@ class UnauthenticatedOrNotAdminBooksTest(TestCase):
             "author": "New Author",
             "cover": "HARD",
             "inventory": 10,
-            "daily_fee": 8.00
+            "daily_fee": 8.00,
         }
         book = self.book1
         url = detail_url(book.id)
@@ -115,7 +115,7 @@ class AdminBooksTest(TestCase):
             "author": "Author",
             "cover": "SOFT",
             "inventory": 4,
-            "daily_fee": 5.00
+            "daily_fee": 5.00,
         }
         res = self.client.post(BOOK_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
@@ -126,7 +126,7 @@ class AdminBooksTest(TestCase):
             "author": "New Author",
             "cover": "HARD",
             "inventory": 10,
-            "daily_fee": 8.00
+            "daily_fee": 8.00,
         }
 
         book = self.book1
