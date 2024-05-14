@@ -31,4 +31,4 @@ class Borrowing(models.Model):
             raise ValidationError("Actual return date must not be before borrow date.")
 
     def __str__(self):
-        return f"{self.book.title} borrowed by {self.user.email} on {self.borrow_date}"
+        return f"Borrowing {self.id}: {self.book.title} borrowed by {self.user.email} on {self.borrow_date}"

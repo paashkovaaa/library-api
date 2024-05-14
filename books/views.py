@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.viewsets import GenericViewSet
 
 from books.models import Book
-from books.seralizers import BookListSerializer, BookDetailSerializer
+from books.serializers import BookListSerializer, BookDetailSerializer
 
 
 class BookViewSet(
