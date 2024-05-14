@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from books.seralizers import BookDetailSerializer
+from books.serializers import BookDetailSerializer
 from borrowings.models import Borrowing
 from borrowings.send_telegram_message import send_telegram_message
 
